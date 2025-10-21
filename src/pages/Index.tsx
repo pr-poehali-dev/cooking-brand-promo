@@ -1,144 +1,199 @@
+import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const recipes = [
+  const galleryImages = [
     {
-      title: 'Быстрая овсянка с ягодами',
-      time: '5 минут',
-      difficulty: 'Легко',
-      image: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/a1067f41-84a0-4a06-bf92-2b650bcbe25d.jpg'
+      url: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/0055f3c3-b722-40eb-adb4-3d57d821c226.jpg',
+      title: 'Набережная Дона',
+      description: 'Вид на реку на закате'
     },
     {
-      title: 'Паста с томатами',
-      time: '15 минут',
-      difficulty: 'Легко',
-      image: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/1aac4766-b286-4332-b5f0-c2b8158745de.jpg'
+      url: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/203cbcf7-a4b1-4c9c-8dca-028667a6d20e.jpg',
+      title: 'Большая Садовая',
+      description: 'Главная улица города'
     },
     {
-      title: 'Омлет с овощами',
-      time: '10 минут',
-      difficulty: 'Очень легко',
-      image: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/a1067f41-84a0-4a06-bf92-2b650bcbe25d.jpg'
+      url: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/d50d4995-647c-449c-afed-f527f0fa13f5.jpg',
+      title: 'Левый берег',
+      description: 'Современная набережная'
+    },
+    {
+      url: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/0055f3c3-b722-40eb-adb4-3d57d821c226.jpg',
+      title: 'Городская панорама',
+      description: 'Архитектура центра'
+    },
+    {
+      url: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/203cbcf7-a4b1-4c9c-8dca-028667a6d20e.jpg',
+      title: 'Исторический центр',
+      description: 'Улицы старого города'
+    },
+    {
+      url: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/d50d4995-647c-449c-afed-f527f0fa13f5.jpg',
+      title: 'Речная прогулка',
+      description: 'Вечерняя набережная'
     }
   ];
 
-  const tips = [
+  const routes = [
     {
-      icon: 'Clock',
-      title: 'Готовьте заранее',
-      description: 'Нарежьте овощи вечером — утром сэкономите 10 минут'
+      title: 'Историческая прогулка',
+      duration: '2-3 часа',
+      distance: '4 км',
+      difficulty: 'Легко',
+      highlights: ['Большая Садовая', 'Соборный переулок', 'Театральная площадь', 'Музей краеведения'],
+      image: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/203cbcf7-a4b1-4c9c-8dca-028667a6d20e.jpg'
     },
     {
-      icon: 'Flame',
-      title: 'Одна сковорода',
-      description: 'Используйте посуду, которую можно мыть в посудомойке'
+      title: 'Набережная маршрут',
+      duration: '1.5-2 часа',
+      distance: '3 км',
+      difficulty: 'Легко',
+      highlights: ['Левобережная набережная', 'Мост через Дон', 'Парк Левобережный', 'Речной вокзал'],
+      image: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/d50d4995-647c-449c-afed-f527f0fa13f5.jpg'
     },
     {
-      icon: 'ShoppingBag',
-      title: 'Список покупок',
-      description: 'Планируйте меню на неделю и покупайте всё сразу'
-    },
-    {
-      icon: 'Refrigerator',
-      title: 'Заморозка',
-      description: 'Готовьте большие порции и замораживайте порционно'
+      title: 'Панорамный тур',
+      duration: '3-4 часа',
+      distance: '6 км',
+      difficulty: 'Средне',
+      highlights: ['Смотровая площадка', 'Парк Революции', 'Пушкинский бульвар', 'Площадь Советов'],
+      image: 'https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/0055f3c3-b722-40eb-adb4-3d57d821c226.jpg'
     }
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-primary">Простая кухня</h1>
-          <div className="flex gap-6">
-            <a href="#about" className="text-foreground hover:text-primary transition-colors">Обо мне</a>
-            <a href="#recipes" className="text-foreground hover:text-primary transition-colors">Рецепты</a>
-            <a href="#tips" className="text-foreground hover:text-primary transition-colors">Советы</a>
+          <h1 className="text-2xl font-bold text-primary">Ростов-на-Дону</h1>
+          <div className="flex gap-6 items-center">
+            <a href="#gallery" className="text-foreground hover:text-primary transition-colors font-medium">
+              Фотогалерея
+            </a>
+            <a href="#routes" className="text-foreground hover:text-primary transition-colors font-medium">
+              Маршруты
+            </a>
+            <Button size="sm" className="hidden md:inline-flex">
+              <Icon name="MapPin" size={16} className="mr-2" />
+              Карта
+            </Button>
           </div>
         </nav>
       </header>
 
-      <section className="relative py-20 md:py-32 overflow-hidden">
+      <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 to-accent/5">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in">
-              <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-                Вкусно и быстро — это реально
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Простые рецепты для занятых людей. Готовьте с удовольствием, а не по необходимости.
-              </p>
-              <Button size="lg" className="rounded-full">
-                Смотреть рецепты
-                <Icon name="ChefHat" className="ml-2" size={20} />
+          <div className="max-w-4xl mx-auto text-center animate-fade-in">
+            <Badge className="mb-6 text-sm px-4 py-1">Городские прогулки</Badge>
+            <h2 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
+              Открой Ростов-на-Дону заново
+            </h2>
+            <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+              Авторские маршруты, скрытые локации и атмосферные фотографии южной столицы России
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Button size="lg" className="text-lg">
+                <Icon name="Camera" className="mr-2" size={20} />
+                Смотреть галерею
+              </Button>
+              <Button size="lg" variant="outline" className="text-lg">
+                <Icon name="MapPin" className="mr-2" size={20} />
+                Выбрать маршрут
               </Button>
             </div>
-            <div className="animate-scale-in">
-              <img
-                src="https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/a1067f41-84a0-4a06-bf92-2b650bcbe25d.jpg"
-                alt="Домашняя кухня"
-                className="rounded-3xl shadow-2xl w-full object-cover"
-              />
-            </div>
           </div>
         </div>
       </section>
 
-      <section id="about" className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1">
-              <img
-                src="https://cdn.poehali.dev/projects/a582476c-0936-4e06-95c6-9df399d0e73b/files/f11ec87f-ba8f-41fd-b42b-42759382ac30.jpg"
-                alt="Обо мне"
-                className="rounded-3xl shadow-xl w-full object-cover"
-              />
-            </div>
-            <div className="order-1 md:order-2">
-              <h2 className="text-4xl font-bold text-foreground mb-6">Обо мне</h2>
-              <div className="space-y-4 text-lg text-muted-foreground">
-                <p>
-                  Привет! Я верю, что готовить каждый день можно легко и с удовольствием. Не нужно часами стоять у плиты или покупать экзотические ингредиенты.
-                </p>
-                <p>
-                  Моя миссия — показать, что вкусная домашняя еда доступна всем. Я делюсь рецептами, которые готовлю сама: быстро, просто и из обычных продуктов.
-                </p>
-                <p className="font-semibold text-primary">
-                  Готовка — это не рутина, а способ заботы о себе и близких.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="recipes" className="py-20">
+      <section id="gallery" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-foreground mb-4">Популярные рецепты</h2>
-            <p className="text-xl text-muted-foreground">Простые блюда на каждый день</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Фотогалерея</h2>
+            <p className="text-xl text-muted-foreground">Атмосферные снимки города и его достопримечательностей</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {recipes.map((recipe, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
-                <div className="relative overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {galleryImages.map((image, index) => (
+              <Dialog key={index}>
+                <DialogTrigger asChild>
+                  <Card className="overflow-hidden cursor-pointer group hover:shadow-2xl transition-all duration-300 animate-scale-in">
+                    <div className="relative overflow-hidden aspect-[4/3]">
+                      <img
+                        src={image.url}
+                        alt={image.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                          <h3 className="text-xl font-bold mb-1">{image.title}</h3>
+                          <p className="text-sm text-white/80">{image.description}</p>
+                        </div>
+                      </div>
+                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Icon name="Expand" size={20} className="text-foreground" />
+                      </div>
+                    </div>
+                  </Card>
+                </DialogTrigger>
+                <DialogContent className="max-w-5xl p-0 border-0">
+                  <img src={image.url} alt={image.title} className="w-full h-auto rounded-lg" />
+                </DialogContent>
+              </Dialog>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="routes" className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Популярные маршруты</h2>
+            <p className="text-xl text-muted-foreground">Выбери свой путь по городу</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {routes.map((route, index) => (
+              <Card key={index} className="overflow-hidden hover:shadow-2xl transition-shadow duration-300 group">
+                <div className="relative overflow-hidden h-56">
                   <img
-                    src={recipe.image}
-                    alt={recipe.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    src={route.image}
+                    alt={route.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-semibold">
-                    {recipe.time}
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-primary text-primary-foreground">{route.difficulty}</Badge>
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-2">{recipe.title}</h3>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Icon name="Star" size={16} className="text-primary" />
-                    <span>{recipe.difficulty}</span>
+                  <h3 className="text-2xl font-bold mb-3">{route.title}</h3>
+                  <div className="flex flex-wrap gap-4 mb-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Icon name="Clock" size={16} className="text-primary" />
+                      <span>{route.duration}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Icon name="MapPin" size={16} className="text-primary" />
+                      <span>{route.distance}</span>
+                    </div>
                   </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-foreground">Основные точки:</p>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      {route.highlights.map((highlight, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <Icon name="Check" size={14} className="text-accent mt-0.5 flex-shrink-0" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button className="w-full mt-6 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                    Подробнее
+                    <Icon name="ArrowRight" size={16} className="ml-2" />
+                  </Button>
                 </div>
               </Card>
             ))}
@@ -146,42 +201,59 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="tips" className="py-20 bg-accent/20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-foreground mb-4">Полезные советы</h2>
-            <p className="text-xl text-muted-foreground">Маленькие хитрости для большой экономии времени</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {tips.map((tip, index) => (
-              <Card key={index} className="p-6 hover:shadow-lg transition-shadow duration-300">
-                <div className="bg-primary/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
-                  <Icon name={tip.icon} size={28} className="text-primary" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">{tip.title}</h3>
-                <p className="text-muted-foreground">{tip.description}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <footer className="bg-foreground text-background py-12">
+      <section className="py-20 bg-gradient-to-br from-primary to-secondary text-white">
         <div className="container mx-auto px-4 text-center">
-          <h3 className="text-2xl font-bold mb-4">Простая кухня</h3>
-          <p className="text-background/80 mb-6">
-            Готовьте с любовью, питайтесь с удовольствием
+          <h2 className="text-4xl font-bold mb-6">Готов исследовать город?</h2>
+          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            Скачай карту маршрутов или присоединяйся к групповой экскурсии
           </p>
-          <div className="flex justify-center gap-6">
-            <a href="#" className="hover:text-primary transition-colors">
-              <Icon name="Instagram" size={24} />
-            </a>
-            <a href="#" className="hover:text-primary transition-colors">
-              <Icon name="Youtube" size={24} />
-            </a>
-            <a href="#" className="hover:text-primary transition-colors">
-              <Icon name="Mail" size={24} />
-            </a>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button size="lg" variant="secondary" className="text-lg">
+              <Icon name="Download" className="mr-2" size={20} />
+              Скачать карту
+            </Button>
+            <Button size="lg" variant="outline" className="text-lg border-white text-white hover:bg-white hover:text-primary">
+              <Icon name="Users" className="mr-2" size={20} />
+              Записаться на экскурсию
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-secondary text-secondary-foreground py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h3 className="text-xl font-bold mb-4">Ростов-на-Дону</h3>
+              <p className="text-secondary-foreground/80">
+                Открывай новые локации и делись впечатлениями о городе
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Разделы</h4>
+              <ul className="space-y-2 text-secondary-foreground/80">
+                <li><a href="#gallery" className="hover:text-accent transition-colors">Фотогалерея</a></li>
+                <li><a href="#routes" className="hover:text-accent transition-colors">Маршруты</a></li>
+                <li><a href="#" className="hover:text-accent transition-colors">О проекте</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Связаться</h4>
+              <div className="flex gap-4">
+                <a href="#" className="hover:text-accent transition-colors">
+                  <Icon name="Instagram" size={24} />
+                </a>
+                <a href="#" className="hover:text-accent transition-colors">
+                  <Icon name="Mail" size={24} />
+                </a>
+                <a href="#" className="hover:text-accent transition-colors">
+                  <Icon name="MapPin" size={24} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-secondary-foreground/20 pt-6 text-center text-sm text-secondary-foreground/60">
+            © 2025 Ростов-на-Дону. Городские прогулки
           </div>
         </div>
       </footer>
